@@ -85,7 +85,7 @@ public class Fileio {
 		out.write("\t\t" + title + "\r\n");
 		for (int i = 0; i < s.size(); i++) {
 			out.write(i + 1 + ".      ");
-			out.write(s.get(i) + "\r\n\n");
+			out.write(s.get(i) + "\r\n\r\n");
 		}
 		out.flush();
 		out.close();

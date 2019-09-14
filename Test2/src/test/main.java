@@ -1,5 +1,6 @@
 package test;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
@@ -7,10 +8,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -18,21 +21,26 @@ import javax.swing.JTextField;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-public class main {
+public class Main {
 	private int mark;            //临时添加，找机会改，记录当前出卷类型
-	private static Login log;
+	private Login log;
 	private JFrame Home;			//主界面
+	
+	private JPanel HBg;				//主界面背景设置
+	
 	private JLabel userInfo;		//用户姓名
 	private JTextField count;		//试卷题目数
 	private JTextField userType;	//出卷类型
 	private JButton setUserType;	//修改用户类型
 	private JButton setCount;		//修改试卷题目数量
 	private JTextArea PreView;		//预览框
-	main()
+	Main()
 	{
 		this.mark=-1;
 		/*构件初始化*/
 		this.log=new Login();
+		this.HBg=new BGPanel(new ImageIcon("2.jpg").getImage());
+		
 		this.Home=new JFrame();
 		this.Home.setSize(800,800);
 		this.Home.setLayout(null);
@@ -44,8 +52,14 @@ public class main {
 		this.PreView=new JTextArea();
 		
 		/*界面布局*/
+		this.HBg.setSize(800, 800);
+		
+		
 		this.Home.setLocation(300,10);
 		this.userInfo.setBounds(30, 30, 100, 30);
+		
+		
+		this.userInfo.setForeground(Color.white);
 		//this.userInfo.setText(a);
 		this.count.setBounds(30, 80, 50, 30);
 		this.setCount.setBounds(100, 80, 80, 30);
@@ -60,18 +74,31 @@ public class main {
 		scroll.setBounds(200, 30, 550, 720);
 		
 		
+		JPanel LeftBelow=new BGPanel(new ImageIcon("5.jpg").getImage());
+		LeftBelow.setBounds(0, 200,200,600);
+		this.HBg.add(LeftBelow);
+		
 		this.PreView.setEditable(false);
 		this.setCount.setText("生成");
 		this.setUserType.setText("切换");
 		this.Home.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		this.HBg.setLayout(null);
+		this.HBg.add(this.userInfo);
+		this.HBg.add(this.count);
+		this.HBg.add(userType);
+		this.HBg.add(this.setCount);
+		this.HBg.add(this.setUserType);
+		this.HBg.add(scroll);
 		
-		this.Home.add(this.userInfo);
-		this.Home.add(this.count);
-		this.Home.add(userType);
-		this.Home.add(this.setCount);
-		this.Home.add(this.setUserType);
-		this.Home.add(scroll);
+		
+		this.Home.add(HBg);
+//		this.Home.add(this.userInfo);
+//		this.Home.add(this.count);
+//		this.Home.add(userType);
+//		this.Home.add(this.setCount);
+//		this.Home.add(this.setUserType);
+//		this.Home.add(scroll);
 		//this.Home.add(new JScrollPane(this.PreView));
 		this.Home.setVisible(false);
 	}
@@ -210,7 +237,16 @@ public class main {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				int num=Integer.parseInt(count.getText());		//获得输入的题目数目
+				
+				String countStr=count.getText();
+				int num=1;
+				
+				System.out.print(countStr);
+				
+				if(!countStr.equals(""))
+				{
+					num=Integer.parseInt(countStr);		//获得输入的题目数目
+				}
 				if(num==-1)				//-1,退出登录，回到登陆界面 
 				{
 					setHomeFalse();
@@ -232,11 +268,11 @@ public class main {
 					for(int i=0;i<num;i++)
 					{
 						//String str=u1.Create();
-						String str=u1.CtreateByBT();
+						String str=u1.CtreateByBT();			//获得生成的题目
 						for(int j=0;j<pros.size();j++)
 						{
 							String s1=pros.get(j);		//发现重复，跳过
-							if(str.equals(j))
+							if(str.equals(s1))
 							{
 								i--;
 								continue;
@@ -271,13 +307,13 @@ public class main {
 	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Fileio fo=new Fileio("");			//工具类，用于文件的读写操作
-		List<user> users=main.getUsers();	//获得所有用户信息
+		//Fileio fo=new Fileio("");			//工具类，用于文件的读写操作
+		List<user> users=Main.getUsers();	//获得所有用户信息
 		for(int i=0;i<users.size();i++)
 		{
 			users.get(i).print();
 		}
-		main m1=new main();
+		Main m1=new Main();
 		m1.logAddAction(users);
 		m1.CanAddAction();
 		m1.SCountAddAction();

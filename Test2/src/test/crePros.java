@@ -58,7 +58,7 @@ public class crePros {
 	}
 	public  void create(Node a,int num)//,int co		//随机运算符二叉树生成
 	{
-		String str="";
+		//String str="";
 		Random ra=new Random();
 		int t=ra.nextInt(num+1);
 		int r=num-t;
